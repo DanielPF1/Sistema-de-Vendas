@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pweb.aula1509.model.entity.*;
 import pweb.aula1509.model.repository.*;
 
@@ -61,6 +62,29 @@ public class VendaController {
         return new ModelAndView("venda/list");
     }
 
+    @GetMapping("/carrinho")
+    public ModelAndView carrinho(HttpSession session, ModelMap model) {
+        // Recupera a venda da sessão
+        Venda venda = (Venda) session.getAttribute("venda");
+
+        // Produtos
+        model.addAttribute("produtos", produtoRepository.produtos());
+
+        // Carrinho (venda da sessão)
+        model.addAttribute("venda", venda);
+
+        // Clientes PF e PJ
+        List<ClientePF> clientesPF = clientePFRepository.listarTodos();
+        List<ClientePj> clientesPJ = clientePJRepository.listarTodos();
+
+        List<Object> clientes = new ArrayList<>();
+        clientes.addAll(clientesPF);
+        clientes.addAll(clientesPJ);
+        model.addAttribute("clientes", clientes);
+
+        return new ModelAndView("venda/carrinho");
+    }
+
     @GetMapping("/menu")
     public ModelAndView menu(HttpSession session, ModelMap model) {
 
@@ -80,16 +104,7 @@ public class VendaController {
         // Carrinho (venda da sessão)
         model.addAttribute("venda", venda);
 
-        // Clientes PF e PJ
-        List<ClientePF> clientesPF = clientePFRepository.listarTodos();
-        List<ClientePj> clientesPJ = clientePJRepository.listarTodos();
 
-        // Junta as duas listas em uma só
-        List<Object> clientes = new ArrayList<>();
-        clientes.addAll(clientesPF);
-        clientes.addAll(clientesPJ);
-
-        model.addAttribute("clientes", clientes);
 
         return new ModelAndView("venda/menu");
     }
@@ -117,7 +132,8 @@ public class VendaController {
     @GetMapping("/add/{idProduto}")
     public ModelAndView addProduto(
             @PathVariable Long idProduto,
-            HttpSession session
+            HttpSession session,
+            RedirectAttributes redirectAttributes
     ) {
         Venda venda = (Venda) session.getAttribute("venda");
         if (venda == null) {
@@ -128,6 +144,12 @@ public class VendaController {
         Produto produto = produtoRepository.produto(idProduto);
         if (produto != null) {
             venda.adicionarProduto(produto);
+
+            // mensagem de sucesso
+            redirectAttributes.addFlashAttribute(
+                    "mensagemSucesso",
+                    "Produto \"" + produto.getDescricao() + "\" adicionado ao carrinho!"
+            );
         }
 
         return new ModelAndView("redirect:/venda/menu");
