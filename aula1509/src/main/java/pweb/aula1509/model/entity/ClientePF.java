@@ -11,10 +11,11 @@ import java.io.Serializable;
 @Entity
 public class ClientePF extends Cliente implements Serializable {
 
-
+    @NotBlank(message = "Não pode ficar em branco")
     private String nome;
 
-
+    @NotBlank(message = "Não pode ficar em branco")
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 números")
     private String cpf;
 
 

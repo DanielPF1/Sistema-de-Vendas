@@ -1,6 +1,7 @@
 package pweb.aula1509.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class Venda implements Serializable {
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
 
+    @NotBlank
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;

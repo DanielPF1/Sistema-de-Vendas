@@ -1,5 +1,6 @@
 package pweb.aula1509.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,12 +29,22 @@ public class ClienteJuridicaController {
         return new ModelAndView("cliente/form");
     }
 
-    @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute("cliente") ClientePj clientePJ){
+    // Método para para utilizar a validação, visto que o outro método form exige dois parametros;
+    public ModelAndView viewForm(ClientePj clientePJ) {
+        ModelAndView mv = new ModelAndView("cliente/form");
+        mv.addObject("cliente", clientePJ);
+        return mv;
+    }
 
+    @PostMapping("/save")
+    public ModelAndView save(@ModelAttribute("cliente") @Valid ClientePj clientePJ,
+                             BindingResult result){
+        if (result.hasErrors()) {
+            return viewForm(clientePJ);
+        }
         //save pessoaFisica
         clientePJRepository.save(clientePJ);
-        return new ModelAndView("redirect:/venda/list");
+        return new ModelAndView("venda/list");
     }
 
     @GetMapping("/list")
