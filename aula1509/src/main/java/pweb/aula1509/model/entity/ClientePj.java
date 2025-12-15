@@ -10,10 +10,11 @@ import java.io.Serializable;
 @Entity
 public class ClientePj extends Cliente implements Serializable {
 
-
+    @NotBlank(message = "Não pode ficar em branco")
     private String razaoSocial;
 
-
+    @NotBlank(message = "Não pode ficar em branco")
+    @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter exatamente 14 números")
     private String cnpj;
 
 
