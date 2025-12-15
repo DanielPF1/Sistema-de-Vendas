@@ -1,39 +1,148 @@
 
-<header class="container" th:fragment="header">
+<header th:fragment="header" class="w-100 m-0 p-0">
 
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark shadow m-0 rounded-0"
+       style="background-color: #1f2937;">
+
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Projeto</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+      <!-- LOGO -->
+      <span class="navbar-brand fw-bold">
+            Programação Web
+        </span>
+
+      <!-- BOTÃO MOBILE -->
+      <button class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- CONTEÚDO -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- MENU ESQUERDO -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/venda/list">Vendas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/produto/list">Produtos</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Cliente
+            <a class="nav-link"
+               th:href="@{/venda/menu}">
+              Menu
             </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link"
+               th:href="@{/venda/list}">
+              Vendas
+            </a>
+          </li>
+
+            <li class="nav-item">
+              <a class="nav-link"
+                 th:href="@{/produto/list}">
+                Produtos
+              </a>
+            </li>
+
+
+          <!-- DROPDOWN CLIENTES -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="#"
+               role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              Clientes PF
+            </a>
+
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href='/clientepf/form'>Clientes Pessoa fisica</a></li>
+              <li>
+                <a class="dropdown-item"
+                   th:href="@{/clientepf/form}">
+                  Cliente PF Cadastro
+                </a>
+              </li>
+
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href='/clientepj/form'>Clientes Pessoa Juridica</a></li>
+
+              <li>
+                <a class="dropdown-item"
+                   th:href="@{/clientepf/list}">
+                  Cliente PF Lista
+                </a>
+              </li>
             </ul>
           </li>
 
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="#"
+               role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              Clientes PJ
+            </a>
+
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item"
+                   th:href="@{/clientepj/form}">
+                  Cliente PJ Cadastro
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <li>
+                <a class="dropdown-item"
+                   th:href="@{/clientepj/list}">
+                  Cliente PJ Lista
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- BOTÃO CARRINHO (direita, antes da busca) -->
+          <ul class="navbar-nav align-items-center me-1">
+            <li class="nav-item">
+              <a class="nav-link position-relative"
+                 th:href="@{/venda/carrinho}">
+
+                <i class="bi bi-cart3 fs-5"></i>
+
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                      th:if="${session.venda != null and !#lists.isEmpty(session.venda.items)}"
+                      th:text="${#lists.size(session.venda.items)}">
+        0
+      </span>
+              </a>
+            </li>
+          </ul>
+
+
         </ul>
-        <form class="d-flex" role="search" method="get" th:action="@{${rota}}">
-          <input class="form-control me-2"
+
+        <!-- BUSCA -->
+        <form class="d-flex"
+              role="search"
+              method="get"
+              th:action="@{${rota ?: '/venda/list'}}">
+
+        <input class="form-control me-2"
                  type="search"
                  placeholder="Buscar por nome"
                  name="nome"
                  th:value="${nome}">
-          <button class="btn btn-outline-success" type="submit">Buscar</button>
+          <button class="btn btn-outline-light" type="submit">
+            Buscar
+          </button>
         </form>
 
       </div>

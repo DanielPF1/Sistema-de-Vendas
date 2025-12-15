@@ -10,6 +10,11 @@
 
 <main class="container mt-4">
     <div class="row">
+        <div th:if="${mensagemSucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${mensagemSucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
 
         <!-- PRODUTOS -->
         <div class="col-md-8">
@@ -39,84 +44,6 @@
             </div>
         </div>
 
-        <!-- CARRINHO -->
-        <div class="col-md-4">
-            <h4>Carrinho</h4>
-
-            <table class="table table-sm table-striped">
-                <thead>
-                <tr>
-                    <th>Produto</th>
-                    <th>Qtd</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                <!-- CARRINHO VAZIO -->
-                <tr th:if="${session.venda == null or #lists.isEmpty(session.venda.items)}">
-                    <td colspan="4">Carrinho vazio</td>
-                </tr>
-
-                <!-- ITENS DO CARRINHO -->
-                <tr th:each="item, var : ${session.venda.items}">
-                    <td th:text="${item.produto.descricao}">Produto</td>
-                    <td th:text="${item.quantidade}">1</td>
-                    <td>
-                        R$
-                        <span th:text="${#numbers.formatDecimal(item.total(), 1, 'COMMA', 2, 'POINT')}">0,00</span>
-                    </td>
-                    <td>
-                        <a th:href="@{/venda/remove/{i}(i=${var.index})}"
-                           onclick="return confirm('Remover este item?')">
-                            Remover
-                        </a>
-                    </td>
-                </tr>
-
-                </tbody>
-
-                <!-- TOTAL -->
-                <tfoot th:if="${session.venda != null and !#lists.isEmpty(session.venda.items)}">
-                <tr>
-                    <th colspan="2">Total</th>
-                    <th colspan="2">
-                        R$
-                        <span th:text="${#numbers.formatDecimal(session.venda.totalVenda, 1, 'COMMA', 2, 'POINT')}">0,00</span>
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
-
-            <!-- FORM FINALIZAR COMPRA -->
-            <form th:action="@{/venda/finalizar}" method="post"
-                  th:if="${session.venda != null and !#lists.isEmpty(session.venda.items)}">
-
-                <div class="mb-2">
-                    <label for="cliente" class="form-label">Cliente</label>
-
-                    <input id="cliente"
-                           name="nomeCliente"
-                           class="form-control"
-                           list="listaClientes"
-                           placeholder="Digite o nome do cliente">
-
-                    <datalist id="listaClientes">
-                        <option th:each="c : ${clientes}"
-                                th:value="${c.nome}">
-                        </option>
-                    </datalist>
-                </div>
-
-                <button type="submit" class="btn btn-success w-100">
-                    Finalizar compra
-                </button>
-
-            </form>
-
-        </div>
 
     </div>
 </main>
