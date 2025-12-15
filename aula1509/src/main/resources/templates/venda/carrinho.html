@@ -31,7 +31,24 @@
 
         <tr th:each="item, var : ${session.venda.items}">
             <td th:text="${item.produto.descricao}">Produto</td>
-            <td th:text="${item.quantidade}">1</td>
+            <td>
+                <form th:action="@{/venda/atualizar-quantidade}" method="post" class="d-flex align-items-center gap-2">
+
+                    <input type="hidden" name="produtoId" th:value="${item.produto.id}" />
+
+                    <input type="number"
+                           name="quantidade"
+                           th:value="${item.quantidade}"
+                           min="1"
+                           class="form-control form-control-sm"
+                           style="width: 70px" />
+
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Atualizar
+                    </button>
+                </form>
+
+            </td>
             <td>
                 R$
                 <span th:text="${#numbers.formatDecimal(item.total(), 1, 'COMMA', 2, 'POINT')}">0,00</span>

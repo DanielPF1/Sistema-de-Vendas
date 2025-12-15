@@ -155,6 +155,25 @@ public class VendaController {
         return new ModelAndView("redirect:/venda/menu");
 
     }
+    @PostMapping("/atualizar-quantidade")
+    public String atualizarQuantidade(
+            @RequestParam Long produtoId,
+            @RequestParam int quantidade,
+            HttpSession session
+    ) {
+        Venda venda = (Venda) session.getAttribute("venda");
+
+        if (venda != null) {
+            for (Item item : venda.getItems()) {
+                if (item.getProduto().getId().equals(produtoId)) {
+                    item.setQuantidade(quantidade);
+                    break;
+                }
+            }
+        }
+
+        return "redirect:/venda/carrinho";
+    }
 
 
 
@@ -168,7 +187,7 @@ public class VendaController {
             session.setAttribute("venda", venda);
         }
 
-        return new ModelAndView("redirect:/venda/menu");
+        return new ModelAndView("redirect:/venda/carrinho");
     }
 
 
