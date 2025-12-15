@@ -8,6 +8,9 @@ body {
 h1 {
     text-align: center;
 }
+.navbar-projeto {
+    background-color: #338fe5; /* azul escuro moderno */
+}
 
 table {
     width: 80%;
